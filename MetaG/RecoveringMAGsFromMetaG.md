@@ -39,8 +39,8 @@ Now that we have all the data we can use a combination of tools to perform a QC 
 Use the SLURM script: ```1_chopper.SLURM.sh``` to clean the reads using [Chopper](https://github.com/wdecoster/chopper) and 
 [Nanoplot](https://github.com/wdecoster/NanoPlot) to visualize the QC stats:
 
-
-This is the template:
+<details>
+<summary>This is the template:</summary>
 
 ```bash
 #!/bin/bash
@@ -166,6 +166,7 @@ echo "I've done"
 date
 
 ```
+</details>
 
 A copy of this script is available in the ```/cluster/projects/nn9987k/.scripts/1_chopper.SLURM.sh```
 
