@@ -254,7 +254,13 @@ cd D01T6_T_QC
 
 The pipeline created 2 folders here. Use tree to display the content:
 
+
 <details>
+
+
+<summary>```bash
+tree
+```</summary>
 
 ```
 /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T_Chopper/D01T6_T_QC
@@ -351,7 +357,9 @@ conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
 
 <details>
 
-<summary>And then we can run the following R script:</summary>
+And then we can run the following:
+
+<summary> R script</summary>
 
 ```R
 # Load required libraries
