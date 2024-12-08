@@ -258,9 +258,7 @@ The pipeline created 2 folders here. Use tree to display the content:
 <details>
 
 
-<summary>```bash
-tree
-```</summary>
+<summary>tree</summary>
 
 ```
 /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T_Chopper/D01T6_T_QC
@@ -624,5 +622,31 @@ Now we are loged into a computing node.
 Display the content of the Flye assembly folder:
 
 ```bash
+ls /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/
+```
 
 ```
+assembly.fasta  assembly_graph.gfa  assembly_graph.gv  assembly_info.txt
+```
+
+We can use ```assembly-stats``` tool to check for the main stats in the assembly:
+
+```bash
+module load Miniconda3/23.10.0-1
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
+assembly-stats /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/assembly.fasta
+```
+
+```
+stats for /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/assembly.fasta
+sum = 821745693, n = 45282, ave = 18147.29, largest = 1393968
+N50 = 25699, n = 8036
+N60 = 19600, n = 11713
+N70 = 15449, n = 16442
+N80 = 11905, n = 22498
+N90 = 8290, n = 30706
+N100 = 63, n = 45282
+N_count = 0
+Gaps = 0
+```
+
