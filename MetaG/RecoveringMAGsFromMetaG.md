@@ -451,7 +451,7 @@ This will produce a pdf file:
 ```
 Plot saved to comparison_NanoStats.pdf
 ```
-[!NanoStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/NanoStats.PNG)
+![NanoStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/NanoStats.PNG)
 
 **What can we say about this plot?**
 
