@@ -1,6 +1,6 @@
 # Recovering MAGs from Metagenomic data
 
-
+![MetaGCow]()
 
 ## 1. Quality control of raw reads.
 
