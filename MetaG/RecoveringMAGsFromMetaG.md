@@ -820,4 +820,17 @@ sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/pro
 
 Same as the fly command, we have already prepared the data for the course and you can copy the Medaka results by:
 
-``
+```bash
+rsync -avLh /cluster/projects/nn9987k/.results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.dir/D01T6_T.medaka.consensus.fasta /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
+tree /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
+```
+
+```
+/cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.MEDAKA.dir/
+└── D01T6_T.medaka.consensus.fasta
+
+0 directories, 1 file
+```
+
+### Comparing Assemlbies before and after polishing:
+
