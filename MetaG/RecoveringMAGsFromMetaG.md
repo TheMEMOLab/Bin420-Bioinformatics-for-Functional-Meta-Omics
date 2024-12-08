@@ -589,8 +589,8 @@ Running using sbatch:
 ```bash
 sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/auve/results
 ```
-[!WARNING]
->Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
+> [!NOTE]
+> Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
 
 But you can copy the results of this assembly by:
 
@@ -806,7 +806,14 @@ date
 We can submit it by:
 
 ```bash
+cd /cluster/projects/nn9987k/$USER
 sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper /cluster/projects/nn9987k/$USER/results/MetaG /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir && mkdir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir
 ```
 
+> [!NOTE]
+> Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
 
+
+Same as the fly command, we have already prepared the data for the course and you can copy the Medaka results by:
+
+``
