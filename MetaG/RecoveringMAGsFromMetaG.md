@@ -7,9 +7,7 @@
 Let's create a set of directories to work on the FRAM HPC:
 
 ```bash
-cd /cluster/projects/nn9987k
-mkdir $USER
-cd $USER
+cd /cluster/projects/nn9987k/$USER
 mkdir scripts && mkdir data && mkdir -p results/MetaG
 tree
 ```
