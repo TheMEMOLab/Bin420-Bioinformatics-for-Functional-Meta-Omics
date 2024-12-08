@@ -230,7 +230,8 @@ Let's inspect the Stats of NanoPlot:
 
 To extend the ONT reads we will use [Flye]() assembler with the ```--meta``` flag:
 
-This is the template and the arguments are:
+<details>
+<summary>This is the template and the arguments are:</summary>
 
     - Input Name
     - Iniput dir
@@ -344,6 +345,8 @@ echo "I've done at"
 date
 
 ```
+
+</details>
 
 Running using sbatch:
 
