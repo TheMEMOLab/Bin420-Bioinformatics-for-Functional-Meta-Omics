@@ -820,6 +820,9 @@ sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/pro
 
 Same as the fly command, we have already prepared the data for the course and you can copy the Medaka results by:
 
+> [!WARNING] 
+> !NB: Remember to kill the Fly job by scancel ```<JOBID>``` Before copying the data .
+
 ```bash
 rsync -avLh /cluster/projects/nn9987k/.results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.dir/D01T6_T.medaka.consensus.fasta /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
 tree /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
@@ -834,3 +837,82 @@ tree /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
 
 ### Comparing Assemlbies before and after polishing:
 
+The best way to compare the assemblies is to perform ```assembly-stats``` on both and then compare the results.
+
+Let's do it.
+
+> [!Important]
+> As we will start working with files let's ask for an interactive session in FRAM:
+
+```bash
+srun \
+--account=nn9987k \
+--gres=localscratch:20G \
+--cpus-per-task 4 \
+--nodes 1 \
+--time=02:00:00 \
+--pty bash \
+-i
+```
+
+Now we can run ```assemlby-stats``` on both files like this:
+
+```bash
+module load Miniconda3/23.10.0-1
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
+FLYE="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/assembly.fasta"
+MEDAKA="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta"
+assembly-stats $FLYE $MEDAKA
+```
+
+```
+stats for /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/assembly.fasta
+sum = 821745693, n = 45282, ave = 18147.29, largest = 1393968
+N50 = 25699, n = 8036
+N60 = 19600, n = 11713
+N70 = 15449, n = 16442
+N80 = 11905, n = 22498
+N90 = 8290, n = 30706
+N100 = 63, n = 45282
+N_count = 0
+Gaps = 0
+-------------------------------------------------------------------------------
+stats for /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta
+sum = 818830768, n = 45282, ave = 18082.92, largest = 1393760
+N50 = 25629, n = 8025
+N60 = 19526, n = 11700
+N70 = 15391, n = 16430
+N80 = 11860, n = 22487
+N90 = 8258, n = 30698
+N100 = 63, n = 45282
+N_count = 0
+Gaps = 0
+
+```
+
+These results are good but not very comparable ```assembly-stats``` can perform an output as a table using the ```-t``` flag:
+
+```
+assembly-stats -t $FLYE $MEDAKA
+
+```
+
+We can save this into a file:
+
+```bash
+assembly-stats -t $FLYE $MEDAKA > /cluster/projects/nn9987k/$USER/results/MetaG/Flye.Medaka.stats.tsv
+cat !$
+```
+
+```
+cat /cluster/projects/nn9987k/$USER/results/Flye.Medaka.stats.tsv
+filename        total_length    number  mean_length     longest shortest        N_count Gaps    N50     N50n    N70     N70n    N90     N90n
+/cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/assembly.fasta 821745693       45282   18147.29        1393968 63      0       0       25699   8036    15449   16442   829030706
+/cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta  818830768       45282   18082.92        1393760 63      0       0       25629   8025    15391       16430   8258    30698
+```
+
+
+**What can we say about this results?**
+
+> [!Important]
+> Remember to finish your interactive session by ```exit```
