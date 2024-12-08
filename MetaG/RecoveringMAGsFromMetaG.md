@@ -357,5 +357,6 @@ Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes
 rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.flye.outdir/assembly* /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/
 ```
 [!WARNING]
-!NB: Remember to kill the Fly job by ```scancel <JOBID>```
+!NB: Remember to kill the Fly job by ```scancel <JOBID>``` .
+
 
