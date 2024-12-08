@@ -1,6 +1,6 @@
 # Recovering MAGs from Metagenomic data
 
-<img src="https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Assemlby.webp" height="100">
+<img src="https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Assemlby.webp" height="400">
 
 ## 1. Quality control of raw reads.
 
