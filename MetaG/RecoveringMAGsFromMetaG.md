@@ -32,6 +32,8 @@ ln -s /cluster/projects/nn9987k/.data/MetaG/ONT/rawreads/D01T6_T.fq.gz data/
 tree
 ```
 
+### Running Chopper and NanoPlot.
+
 Now that we have all the data we can use a combination of tools to perform a QC and cleanning the reads
 
 Use the SLURM script: ```1_chopper.SLURM.sh``` to clean the reads using [Chopper](https://github.com/wdecoster/chopper) and 
@@ -834,7 +836,7 @@ tree /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
 0 directories, 1 file
 ```
 
-### Comparing Assemlbies before and after polishing:
+### Comparing Assemblies before and after polishing:
 
 The best way to compare the assemblies is to perform ```assembly-stats``` on both and then compare the results.
 
