@@ -918,6 +918,14 @@ cd /cluster/projects/nn9987k/$USER/results/MetaG/
 Rscript /cluster/projects/nn9987k/.scripts/assemblyStats.r /cluster/projects/nn9987k/$USER/results/MetaG/Flye.Medaka.stats.tsv
 ```
 
+This producess the plot:
+
+```
+Plot saved as AssemblyStats.pdf
+```
+
+![AssemblyStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Assemblystats.PNG)
+
 **What can we say about this results?**
 
 > [!Important]
