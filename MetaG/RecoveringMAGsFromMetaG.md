@@ -235,6 +235,8 @@ This is the template and the arguments are:
     - Iniput dir
     -Output dir
 
+
+
 ```bash
 
 #!/bin/bash
@@ -284,12 +286,12 @@ RSYNC='rsync -aLhv --no-perms --no-owner --no-group'
 ##Activate conda environments ## Arturo
 
 module --quiet purge  # Reset the modules to the system default
-module load Anaconda3/2022.10
+module load Miniconda3/23.10.0-1
 
 ##Activate conda environments
 
 export PS1=\$
-source ${EBROOTANACONDA3}/etc/profile.d/conda.sh
+eval "$(/cluster/software/Miniconda3/23.10.0-1/bin/conda shell.bash hook)"
 conda deactivate &>/dev/null
 
 conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning
@@ -349,8 +351,11 @@ Running using sbatch:
 sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/auve/results
 ```
 
-Unfortunatelly for the BIN240 Course Sigma2 has restricted the ```bigmem``` nodes in FRAM computer, so it is most likely the Job cannot run. But you can copy the results of this assembly by:
+Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in FRAM computer, so it is most likely the Job never runs. But you can copy the results of this assembly by:
 
 ```bash
-rsync -avLh 
+rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.flye.outdir/assembly* /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/
 ```
+[!WARNING]
+!NB: Remember to kill the Fly job by ```scancel <JOBID>```
+
