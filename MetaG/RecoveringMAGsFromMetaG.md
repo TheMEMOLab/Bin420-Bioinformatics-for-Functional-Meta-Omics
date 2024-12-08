@@ -454,7 +454,10 @@ This will produce a pdf file:
 Plot saved to comparison_NanoStats.pdf
 ```
 
-** What you can say about this plot? **
+**What can we say about this plot?**
+
+> [!Important]
+> Remember to finish your interactive session by ```exit```
 
 ## 2. Assembly reads with MetaFlye
 
@@ -586,8 +589,10 @@ Running using sbatch:
 ```bash
 sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/auve/results
 ```
+[!warning]
+>Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
 
-Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in FRAM computer, so it is most likely the Job never runs. But you can copy the results of this assembly by:
+But you can copy the results of this assembly by:
 
 ```bash
 rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.flye.outdir/assembly* /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/
@@ -649,4 +654,159 @@ N100 = 63, n = 45282
 N_count = 0
 Gaps = 0
 ```
+> [!Important]
+> Remember to finish your interactive session by ```exit```
+
+## 3. Polishing.
+
+A basic model of how polishing works is that the polisher stacks all relevant reads on top of the genome and decides for each position whether the present nucleotide letter is the best representative for that position, or not. There are several sources of variation that make draft assemblies polishable. The main sources are multi-strain variation from closely related species as well as incorporation of sequencing errors during the sequencing process. Ideally, assemblers would be perfect, and we wouldn't have to perform polishing. But because of some noise or artefacts that are present in our data, we might make our genomes more truthful to their biological origin by performing these polishing steps.
+
+Genome polishing is reminiscent of generating a consensus genome. Consensus genome creation is a term used in reference mapping. This is why you may incidentally see the term consensus being used in the tools that we're gonna run.
+
+[medaka](https://github.com/nanoporetech/medaka) is a tool to create consensus sequences and variant calls from nanopore sequencing data. This task is performed using neural networks applied a pileup of individual sequencing reads against a reference sequence, mostly commonly either a draft assembly or a database reference sequence. It provides state-of-the-art results outperforming sequence-graph based methods and signal-based methods, whilst also being faster.
+
+**Features**
+
+    -Requires only basecalled data. (.fasta or .fastq)
+    -Improved accuracy over graph-based methods (e.g. Racon).
+    -50X faster than Nanopolish (and can run on GPUs).
+    -Includes extras for implementing and training bespoke correction networks.
+    -Works on Linux and MacOS.
+    -Open source (Oxford Nanopore Technologies PLC. Public License Version 1.0)
+
+### Running Medaka.
+
+Medaka needs two parameters to run:
+
+- Fasta file of the assembly.
+- Fastq files used for the assembly.
+
+The main syntax would be something like this:
+
+```bash
+medaka_consensus \
+-i $input.chopper.fq.gz \
+-d $input.assembly.fasta \
+-o $input.medaka.dir \
+-t $SLURM_CPUS_ON_NODE
+
+```
+<details>
+
+<summary> The following SLURM script can be used to perform the Medaka polishing </summary>
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=MedakaPolishing
+#
+## Wall time limit:
+#SBATCH --time=24:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 16
+#SBATCH --gres=localscratch:200G
+#SBATCH --output=slurm-%x_%j.out
+#########################################
+
+#Variables
+RSYNC='rsync -aLhv --no-perms --no-owner --no-group'
+input=$1
+READIR=$2
+ASSDIR=$3
+OUTDIR=$4
+
+##Main script
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3/23.10.0-1
+
+##Activate conda environments
+
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn10039k/shared/condaenvironments/MEDAKA
+echo "I am workung with this" $CONDA_PREFIX
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying files to" $LOCALSCRATCH
+
+echo "Copy fq file"
+
+time $RSYNC $READIR/$input.chopper.fq.gz .
+
+echo "Copy assembly"
+
+time $RSYNC $ASSDIR/$input.flye.outdir/assembly.fasta ./$input.assembly.fasta
+
+##MEdaking
+
+echo "Starting Medaka..."
+date +%d\ %b\ %T
+
+time medaka_consensus \
+-i $input.chopper.fq.gz \
+-d $input.assembly.fasta \
+-o $input.medaka.dir \
+-t $SLURM_CPUS_ON_NODE
+
+echo "Cleaning and changing names..."
+
+cd $input.medaka.dir
+echo "I am on:"
+pwd
+mv consensus.fasta $input.toto
+
+###Cleaning
+
+ls -1|grep -v toto|\
+while read -r line; 
+    do
+    rm -r $line;
+done
+
+mv $input.toto $input.medaka.consensus.fasta
+
+##moving resutls
+
+echo "Rsync results to $OUTDIR"
+cd $LOCALSCRATCH
+$RSYNC $input.medaka.dir $OUTDIR/
+
+###
+echo "I've done"
+date
+
+```
+
+We can submit it by:
+
+```bash
+sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper /cluster/projects/nn9987k/$USER/results/MetaG /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir && mkdir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir
+```
+
 
