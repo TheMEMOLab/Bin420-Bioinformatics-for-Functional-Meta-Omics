@@ -358,5 +358,5 @@ rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.flye.outdir/assembl
 ```
 
 > [!WARNING] 
-> !NB: Remember to kill the Fly job by scancel <JOBID> .
+> !NB: Remember to kill the Fly job by scancel ```<JOBID>``` .
 
