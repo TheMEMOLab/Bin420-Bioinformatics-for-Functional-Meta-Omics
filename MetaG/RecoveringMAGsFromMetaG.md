@@ -710,7 +710,7 @@ medaka_consensus \
 ## Other parameters:
 #SBATCH --nodes 1
 #SBATCH --cpus-per-task 16
-#SBATCH --gres=localscratch:200G
+#SBATCH --gres=localscratch:50G
 #SBATCH --output=slurm-%x_%j.out
 #########################################
 
@@ -801,6 +801,8 @@ $RSYNC $input.medaka.dir $OUTDIR/
 echo "I've done"
 date
 
+
+
 ```
 
 </details>
@@ -809,7 +811,7 @@ We can submit it by:
 
 ```bash
 cd /cluster/projects/nn9987k/$USER
-sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper /cluster/projects/nn9987k/$USER/results/MetaG /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir && mkdir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir
+sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper/D01T6_T_Chopper /cluster/projects/nn9987k/$USER/results/MetaG /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir && mkdir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir
 ```
 
 > [!NOTE]
