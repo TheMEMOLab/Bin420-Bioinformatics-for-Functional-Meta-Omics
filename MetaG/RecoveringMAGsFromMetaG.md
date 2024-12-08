@@ -910,7 +910,7 @@ filename        total_length    number  mean_length     longest shortest        
 /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta  818830768       45282   18082.92        1393760 63      0       0       25629   8025    15391       16430   8258    30698
 ```
 
-We can plot this results:
+We can plot this result table:
 
 ```bash
 conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
