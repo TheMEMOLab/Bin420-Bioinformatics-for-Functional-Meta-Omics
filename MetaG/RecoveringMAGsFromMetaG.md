@@ -926,7 +926,7 @@ Plot saved as AssemblyStats.pdf
 
 ![AssemblyStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Assemblystats.PNG)
 
-**What can we say about this results?**
+**What can we say about these results?**
 
 > [!Important]
 > Remember to finish your interactive session by ```exit```
