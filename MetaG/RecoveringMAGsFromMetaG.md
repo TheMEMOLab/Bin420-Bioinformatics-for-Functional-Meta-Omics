@@ -803,6 +803,8 @@ date
 
 ```
 
+</details>
+
 We can submit it by:
 
 ```bash
