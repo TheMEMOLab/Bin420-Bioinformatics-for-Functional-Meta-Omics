@@ -1,5 +1,7 @@
 # Wroking with FRAM Cluster Sigma2-NIRS
 
+This workshop was doing by help of [Sigma2-NIRS](https://documentation.sigma2.no/index.html).
+
 ### What is this?
 
 This document is intended to be a quick reference guide on the basic usage of the FRAM Sigma2 HPC cluster. For a complete reference please referer to the full documentation of [FRAM](https://documentation.sigma2.no/hpc_machines/fram.html).
