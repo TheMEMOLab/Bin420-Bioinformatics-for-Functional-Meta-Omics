@@ -456,6 +456,15 @@ Plot saved to comparison_NanoStats.pdf
 ```
 ![NanoStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/NanoStats.PNG)
 
+> [!Note]
+> To copy data from FRAM to our laptop we can use SCP:
+
+```bash
+scp auve@fram.sigma2.no:/cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/D01T6_T_QC/comparison_NanoStats.pdf .
+```
+
+> Rember to change ```auve``` to your user name in FRAM
+
 **What can we say about this plot?**
 
 > [!Important]
