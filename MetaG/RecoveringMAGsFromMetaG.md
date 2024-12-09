@@ -350,6 +350,7 @@ R is intalled as conda environment so let's call Miniconda3 and R_env
 
 ```bash
 module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
 conda activate /cluster/projects/nn9987k/.share/conda_environments/R_env/
 ```
 
