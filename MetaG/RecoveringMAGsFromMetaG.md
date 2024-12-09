@@ -1374,5 +1374,102 @@ Then copy the files:
 ```bash
 mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
 rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/DREPLICATION/D01T6_T.DREP.70.5.out /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION/
+tree /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
 ```
 
+```
+/cluster/projects/nn9987k/auve/results/MetaG/DEREPLICATION
+└── D01T6_T.DREP.70.5.out
+    ├── data
+    │   ├── checkM
+    │   │   └── checkM_outdir
+    │   │       ├── bins
+    │   │       │   ├── D01T6_T.MaxBin.out.001.fasta
+    │   │       │   │   ├── genes.faa
+    │   │       │   │   ├── hmmer.analyze.txt
+    │   │       │   │   └── hmmer.tree.txt
+    ...
+│   ├── Cluster_scoring.pdf
+    │   ├── Primary_clustering_dendrogram.pdf
+    │   ├── Secondary_clustering_dendrograms.pdf
+    │   ├── Secondary_clustering_MDS.pdf
+    │   └── Winning_genomes.pdf
+    └── log
+        ├── cluster_arguments.json
+        └── logger.log
+
+584 directories, 8367 files
+```
+
+A lot of files and directories. Let's list the content of the main directory:
+
+```bash
+cd /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION/D01T6_T.DREP.70.5.out
+ls
+```
+
+```
+data  data_tables  dereplicated_genomes  figures  log
+```
+
+All our final dereplicated genomes are in the ```dereplicated_genomes``` folder
+
+```bash
+tree /cluster/projects/nn9987k/auve/results/MetaG/DEREPLICATION/D01T6_T.DREP.70.5.out/dereplicated_genomes/
+```
+
+```
+dereplicated_genomes/
+├── D01T6_T.MaxBin.out.004.fasta
+├── D01T6_T.Metabat2.102.fasta
+├── D01T6_T.Metabat2.136.fasta
+├── D01T6_T.Metabat2.143.fasta
+├── D01T6_T.Metabat2.150.fasta
+├── D01T6_T.Metabat2.182.fasta
+├── D01T6_T.Metabat2.188.fasta
+├── D01T6_T.Metabat2.53.fasta
+└── D01T6_T.Metabat2.8.fasta
+
+0 directories, 9 files
+```
+
+We can also take a look inside the figures. As these are PDF files we should transfer those to our PC:
+
+>[!Note]
+> The following command should be run in your local PC
+
+```bash
+scp -r fram.sigma2.no:/cluster/projects/nn9987k/auve/results/MetaG/DEREPLICATION/D01T6_T.DREP.70.5.out/figures .
+```
+
+```
+Secondary_clustering_dendrograms.pdf                                                                                                                      100%   17KB 230.3KB/s   00:00
+Clustering_scatterplots.pdf                                                                                                                               100%   22KB 506.3KB/s   00:00
+Secondary_clustering_MDS.pdf                                                                                                                              100%   15KB 341.4KB/s   00:00
+Primary_clustering_dendrogram.pdf                                                                                                                         100%   16KB 421.5KB/s   00:00
+Cluster_scoring.pdf                                                                                                                                       100%   29KB 732.8KB/s   00:00
+Winning_genomes.pdf
+```
+
+Finally we can take a look into the checkM results and see all our genomes:
+
+```bash
+cd /cluster/projects/nn9987k/auve/results/MetaG/DEREPLICATION/D01T6_T.DREP.70.5.out/data/checkM/checkM_outdir
+ls
+```
+
+```
+bins  Chdb.tsv  checkm.log  lineage.ms  results.tsv  storage
+```
+
+We can then for example ask to see the results for those bins with a commpleteness > 70 and a contamination < 10
+
+```bash
+cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
+```
+
+```
+cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
+```
+
+How many bins pass that condition?
