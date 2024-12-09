@@ -971,6 +971,8 @@ contig_11793    9761    0.68921 0.68921 5.96467
 contig_32889    3902    3.56103 3.56103 0.349244
 ```
 
+### Running Binning tools:
+
 Where you need the length of each contig and the deepth sequenced in each experiment. To do this we will map all the reads to the MEDAKA polished assembly using ```minimap2``` and then we will use the ```jgi_summarize_bam_contig_depths``` script to get the depth file.
 
 <details>
@@ -1201,7 +1203,7 @@ echo "Number of Bins recovered by metabat2 $METABAT"
 echo "Number of Bins recovered by maxbin2 $MAXBIN"
 ```
 
-# 5. Dereplication 
+## 5. Dereplication 
 
 As we use 2 different binning strategies and we could be dealing with recoveing same organissm recovered in duplicated MAGs.
 
