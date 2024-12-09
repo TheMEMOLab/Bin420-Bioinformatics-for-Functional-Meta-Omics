@@ -1471,7 +1471,18 @@ cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2
 ```
 
 ```
-cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
+D01T6_T.Metabat2.100.fasta f__Lachnospiraceae (UID1255) 95.00 8.04
+D01T6_T.Metabat2.102.fasta o__Bacteroidales (UID2716) 89.85 3.49
+D01T6_T.Metabat2.136.fasta o__Clostridiales (UID1226) 83.17 2.85
+D01T6_T.Metabat2.143.fasta o__Clostridiales (UID1226) 77.51 1.52
+D01T6_T.Metabat2.150.fasta o__Clostridiales (UID1212) 92.56 0.71
+D01T6_T.Metabat2.182.fasta o__Clostridiales (UID1212) 86.69 4.70
+D01T6_T.Metabat2.188.fasta p__Bacteroidetes (UID2605) 75.87 2.86
+D01T6_T.Metabat2.42.fasta o__Selenomonadales (UID1024) 93.29 7.98
+D01T6_T.Metabat2.53.fasta p__Actinobacteria (UID2112) 77.80 4.03
+D01T6_T.Metabat2.59.fasta p__Euryarchaeota (UID3) 70.40 5.60
+D01T6_T.Metabat2.6.fasta f__Bifidobacteriaceae (UID1458) 91.83 0.09
+D01T6_T.Metabat2.8.fasta o__Clostridiales (UID1212) 88.09 0.22
 ```
 
 **How many bins pass that condition?**
