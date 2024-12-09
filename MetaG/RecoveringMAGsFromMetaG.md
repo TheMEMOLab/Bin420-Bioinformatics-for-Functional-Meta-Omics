@@ -179,7 +179,7 @@ The script requires 3 arguments:
 
 ```bash
 
-sbatch /cluster/projects/nn9987k/.scripts/1_chopper.SLURM.sh D01T6_T /cluster/projects/nn9987k/auve/data /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T_Chopper && mkdir -p /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T_Chopper
+sbatch /cluster/projects/nn9987k/.scripts/1_chopper.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/data /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper
 
 ```
 
