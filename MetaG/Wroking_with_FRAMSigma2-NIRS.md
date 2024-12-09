@@ -11,7 +11,7 @@ This document is intended to be a quick reference guide on the basic usage of th
 For login open a Command-line interfase (CLI) or Terminal  and type something like this. 
 
 ```bash
-ssh auve@fram.sigma.no
+ssh auve@fram.sigma2.no
 ```
 > [!Important]
 > Rember to change your user name
