@@ -959,3 +959,203 @@ Popular binning algorithms like the ones used in Metabat2 utilize contig depth a
 
 >[!Note]
 > In this course we will use 2 binning algorithms [Metabat2](https://bitbucket.org/berkeleylab/metabat/src) and  [Maxbin2](https://sourceforge.net/projects/maxbin2/)
+
+The main idea of behind both binning tools is to generate a depth file something like this:
+
+```
+contigName      contigLen       totalAvgDepth   D01T6_T.assembly.sorted D01T6_T.assembly.sorted-var
+contig_39985    16409   0.00695 0.00695 0.0069018
+contig_4475     21271   2.38526 2.38526 4.23974
+contig_45196    5928    3.8027  3.8027  3.60767
+contig_11793    9761    0.68921 0.68921 5.96467
+contig_32889    3902    3.56103 3.56103 0.349244
+```
+
+Where you need the length of each contig and the deepth sequenced in each experiment. To do this we will map all the reads to the MEDAKA polished assembly using ```minimap2``` and then we will use the ```jgi_summarize_bam_contig_depths``` script to get the depth file.
+
+<details>
+
+<summary>This SLURM script has all the instructions</summary>
+
+
+```bash
+#!/bin/bash
+
+##############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=Binning
+#
+## Wall time limit:
+#SBATCH --time=48:00:00
+###Account
+#SBATCH --account=nn9987k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 16
+#SBATCH --mem=50G
+#SBATCH --gres=localscratch:200G
+#SBATCH --output=slurm-%x_%j.out
+#########################################	
+
+#Variables
+RSYNC='rsync -aPLhv --no-perms --no-owner --no-group'
+input=$1
+READIR=$2
+ASSDIR=$3
+OUTDIR=$4
+
+##Activate conda environments ## Arturo
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+module load Miniconda3/23.10.0-1
+
+
+##Activate conda environments
+
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
+echo "I am workung with this" $CONDA_PREFIX
+
+
+###Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+
+echo "copying files to" $LOCALSCRATCH
+
+##createing a directory for Metabat
+mkdir $input.Binning.dir
+cd $input.Binning.dir
+
+echo "Copy fq file"
+
+time $RSYNC $READIR/$input.chopper.fq.gz .
+
+echo "Copy assembly"
+
+time $RSYNC $ASSDIR/$input.medaka.dir/$input.medaka.consensus.fasta ./$input.assembly.fasta
+
+##Aling
+
+echo "Start minimap2 "
+date +%d\ %b\ %T
+
+time minimap2 \
+-ax map-ont \
+-t $SLURM_CPUS_ON_NODE \
+$input.assembly.fasta \
+$input.chopper.fq.gz > $input.assembly.sam
+
+#Get the bam and the files
+
+echo "Samtools view.."
+ 
+time samtools view \
+-@ $SLURM_CPUS_ON_NODE \
+-bS $input.assembly.sam > $input.assembly.bam
+
+rm -r $input.assembly.sam
+rm -r $input.chopper.fq.gz
+
+echo "samtools sort"
+
+time samtools sort \
+-@ $SLURM_CPUS_ON_NODE $input.assembly.bam > $input.assembly.sorted.bam
+
+rm -r $input.assembly.bam
+
+###Binning
+
+echo "Calcaulating deepth..."
+
+time jgi_summarize_bam_contig_depths \
+        --outputDepth $input.depth.txt \
+        $input.assembly.sorted.bam
+
+echo "Modifying $input.depth.txt to a MaxBin2 format:"
+
+cut -f1,3 $input.depth.txt | tail -n+2 > $input.depth_maxbin.txt  
+
+##Using Parallel to run metaba2 and Maxbin2 at the same time with 8 CPUs each...
+
+cpu=$(($SLURM_CPUS_ON_NODE/2))
+echo "Running parallel with $cpu cpus"
+
+time parallel -j2 ::: "metabat2 \
+        -i $input.assembly.fasta \
+        -a $input.depth.txt \
+        -m 1500 \
+        --seed 100 \
+        -t $cpu \
+        --unbinned \
+        -o $input.Metabat2" \
+        "run_MaxBin.pl \
+        -contig $input.assembly.fasta \
+        -out $input.MaxBin.out \
+        -abund $input.depth_maxbin.txt \
+        -thread $cpu"
+
+#Changing suffix fa to fasta useful for further analysis
+
+for i in *.fa;
+        do
+        a=$(basename $i .fa);
+        mv $i $a.fasta;
+done
+
+#Remove the original assemlby
+
+rm $input.assembly.fasta
+
+###
+echo "Moving Binnig files to $OUTDIR"
+
+cd $LOCALSCRATCH
+
+time $RSYNC $input.Binning.dir $OUTDIR/
+
+#######
+echo "I've done"
+date
+
+```
+
+</details>
+
+The script needs 4 arguments:
+- input=$1  Name of the sample
+- READIR=$2 Directory of the Choppered reads 
+- ASSDIR=$3 Medaka directory
+- OUTDIR=$4 Output directry
+
+Let's run it:
+
+```bash
+sbatch /cluster/projects/nn9987k/.scripts/4_Binning.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper/D01T6_T_Chopper /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir/
+```
+>[!Note]
+> As before if the script does not work we can copy the data by
+```bash
+rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.BINNING.dir/D01T6_T.Binning.dir /cluster/projects/nn9987k/$USER/results/MetaG/
+```
+>[!Important]
+> If the job did not work remember to kill it by ```scancel <jobid>```
+
