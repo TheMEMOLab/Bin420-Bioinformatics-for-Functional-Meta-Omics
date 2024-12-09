@@ -651,6 +651,7 @@ We can use ```assembly-stats``` tool to check for the main stats in the assembly
 
 ```bash
 module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
 conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
 assembly-stats /cluster/projects/nn9987k/auve/results/MetaG/D01T6_T.flye.outdir/assembly.fasta
 ```
