@@ -600,7 +600,7 @@ Running using sbatch:
 
 
 ```bash
-sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/auve/results
+sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/$USER/results
 ```
 > [!NOTE]
 > Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
