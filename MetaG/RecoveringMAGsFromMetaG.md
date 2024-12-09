@@ -1472,4 +1472,7 @@ cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2
 cat results.tsv |grep -v Bin|awk -F "\t" '{if($12 > 70  && $13 < 10) print $1,$2,$12,$13}'
 ```
 
-How many bins pass that condition?
+**How many bins pass that condition?**
+
+> [!Important]
+> Remember to finish your interactive session by ```exit```
