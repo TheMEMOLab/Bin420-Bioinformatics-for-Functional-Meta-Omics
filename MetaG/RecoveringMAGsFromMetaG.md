@@ -945,3 +945,11 @@ Plot saved as AssemblyStats.pdf
 
 > [!Important]
 > Remember to finish your interactive session by ```exit```
+
+## 4. Binning.
+
+So far we created an assembly containing all contigs (continuous sequences) from each of the organisms in the microbial community that we sequenced from the cow rumen.
+
+Presently, the assembly consists of thousands of contigs, each coming from a single species. By grouping together the contigs from each species present in our sample, we can create what is referred to as a MAG, short for Metagenome Assembled Genome.
+
+Popular binning algorithms like the ones used in Metabat2 utilize contig depth as a tell tale to link the individual contigs together that come from the same species. This is done by mapping the original reads onto the assembly and then counting the read depth of each contig. The smart thing here is that contigs coming from the same species will have similar depth. Another vital contig statistic that binners use is the GC-content. Each species has its own intrinsic GC-content, and by grouping contigs further on GC-content -in this case by counting the tetranucleotide frequency- we might get good representatives for distinct species in our sample. If our bins live up to our requirements, we can refer to them as MAGs.
