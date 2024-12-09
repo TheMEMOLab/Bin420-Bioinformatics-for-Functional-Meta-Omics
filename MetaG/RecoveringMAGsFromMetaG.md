@@ -957,5 +957,5 @@ Popular binning algorithms like the ones used in Metabat2 utilize contig depth a
 ![Bining](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Binning.png)
 
 
->![Note]
+>[!Note]
 > In this course we will use 2 binning algorithms [Metabat2](https://bitbucket.org/berkeleylab/metabat/src) and  [Maxbin2](https://sourceforge.net/projects/maxbin2/)
