@@ -1711,6 +1711,8 @@ Although we can display the content of the *.tsv* files obtained by DRAM here in
 scp -r fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out/DRAM.Results.dir/dram.genome_summaries.dir .
 ```
 
+Here you can get an example of the report:
 
+![DRAM](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/DRAMproduct.PNG)
 
 ### CompareM2
