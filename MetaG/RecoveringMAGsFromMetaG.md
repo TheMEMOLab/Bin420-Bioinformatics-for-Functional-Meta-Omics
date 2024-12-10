@@ -1400,7 +1400,9 @@ tree /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
     │   │       │   │   ├── hmmer.analyze.txt
     │   │       │   │   └── hmmer.tree.txt
     ...
+    ├── figures
     │   ├── Cluster_scoring.pdf
+    │   ├── Cluster_scatterplots.pdf
     │   ├── Primary_clustering_dendrogram.pdf
     │   ├── Secondary_clustering_dendrograms.pdf
     │   ├── Secondary_clustering_MDS.pdf
