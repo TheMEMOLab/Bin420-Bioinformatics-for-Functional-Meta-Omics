@@ -1644,7 +1644,7 @@ Use the following sbatch line to run:
 
 
 ```bash
-sbatch scripts/6a_DRAM.SLURM.sh /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION/D01T6_T.DREP.70.5.out/ fasta /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
+sbatch /cluster/projects/nn9987k/.scripts/6a_DRAM.SLURM.sh /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION/D01T6_T.DREP.70.5.out/ fasta /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
 ```
 
 [!Note]
@@ -1716,3 +1716,304 @@ Here you can get an example of the report:
 ![DRAM](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/DRAMproduct.PNG)
 
 ### CompareM2
+
+An additional and brand new tool for annotation created here at the MEMO group is [CompareM2](https://comparem2.readthedocs.io/en/latest/).
+
+According to the readthedocs:
+
+**"🧬 CompareM2 is a genomes-to-report pipeline. It accepts prokaryotic (bacterial and archaeal) genomic assemblies and compares them in many different ways.
+
+🦠 Being designed to analyze assemblies of both isolates and metagenomes (MAGs), it is useful for anyone working with microbial genomics. "
+
+<details>
+
+<summary>This is the SLURM template for CompareM2</summary>
+
+```bash
+#!/bin/bash
+#########################################################################
+
+###############SLURM SCRIPT###################################
+
+## Job name:
+#SBATCH --job-name=COMPAREM2
+#
+## Wall time limit:
+#SBATCH --time=90:00:00
+###Account
+#SBATCH --account=nn9864k
+## Other parameters:
+#SBATCH --nodes 1
+#SBATCH --cpus-per-task 16
+#SBATCH --mem=80G
+#SBATCH --gres=localscratch:200G
+#SBATCH --partition=bigmem
+#SBATCH --out slurm-%x-%A.out
+
+###########################################################
+
+##########Variables
+
+dir=$1 ##directory with fasta files
+OUTDIR=$2 #Outputdirectory
+RSYNC='rsync -aLhv --no-perms --no-owner --no-group'
+
+
+##Activate conda environments ## Arturo
+
+module --quiet purge  # Reset the modules to the system default
+mmodule load Miniconda3/23.10.0-1
+
+
+##Activate conda environments
+
+eval "$(conda shell.bash hook)"
+
+conda activate /cluster/projects/nn9987k/.share/conda_environments/COMPAREM2/ 
+
+####Do some work:########
+
+## For debuggin
+echo "Hello" $USER
+echo "my submit directory is:"
+echo $SLURM_SUBMIT_DIR
+echo "this is the job:"
+echo $SLURM_JOB_ID
+echo "I am running on:"
+echo $SLURM_NODELIST
+echo "I am running with:"
+echo $SLURM_CPUS_ON_NODE "cpus"
+echo "Today is:"
+date
+
+
+## Copying data to local node for faster computation
+
+cd $LOCALSCRATCH
+echo "copying files to" $LOCALSCRATCH
+
+#Copy the MAGs to the $LOCALSCRATCH for local computation
+
+echo "copying MAGs to" $LOCALSCRATCH
+
+time $RSYNC $dir/ ./MAGs
+
+
+##################COMPAREM2##############################
+########Configuration of COMPAREM###############
+
+export COMPAREM2_DATABASES="/cluster/projects/nn9987k/.share/db/COMPAREM2"
+export APPTAINER_TMPDIR=$LOCALSCRATCH
+export APPTAINER_CACHEDIR=$LOCALSCRATCH
+
+echo "This configuration is running:"
+
+echo "DB" $COMPAREM2_DATABASES
+echo "APTTMPDID" $APPTAINER_TMPDIR
+echo "APTCACHE" $APPTAINER_CACHEDIR
+
+echo "Starting COMPAREM2"
+date +%b\ %d\ %T
+
+time comparem2 \
+--cores $SLURM_CPUS_ON_NODE \
+--use-singularity \
+--singularity-prefix $(pwd) \
+--config input_genomes="$(pwd)/MAGs/*.fasta" output_directory="CompareM.out.dir" \
+--until assembly_stats checkm2 prokka gtdbtk
+
+###########Moving results to $SLURM_SUBMIT_DIR partition or anywhere the main script was submitted############
+
+echo "moving results to" $OUTDIR/
+
+cd $LOCALSCRATCH
+
+time $RSYNC CompareM.out.dir $OUTDIR/
+
+echo "COMPAREM results are in: " $OUTDIR/CompareM.out.dir
+
+```
+</details>
+
+This script requires the following arguments:
+
+dir=$1 ##directory with fasta files
+OUTDIR=$2 #Outputdirectory
+
+### Running compareM2
+
+```bash
+sbatch /cluster/projects/nn9987k/.scripts/6b_CompareM2.SLURM.sh  /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION/D02T6_C.DREP.70.5.out/dereplicated_genomes /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out
+```
+
+
+>[!Note]
+> As compareM2 also requires a lot of resources and time let's just work with the pre-made data:
+
+```bash
+mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out
+rsync -avLhv /cluster/projects/nn9987k/.results/MetaG/COMPAREM2/D01T6_T.Comparem2.out/ /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out
+tree /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out
+```
+
+```
+/cluster/projects/nn9987k/auve/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out
+└── CompareM.out.dir
+    ├── assembly-stats
+    │   └── assembly-stats.tsv
+    ├── benchmarks
+    │   ├── benchmark.checkm2.tsv
+    │   ├── benchmark.gtdbtk.tsv
+.
+.
+.
+│           └── D01T6_T.Metabat2.8.txt
+    ├── tables
+    │   ├── 13389176__assembly_stats.tsv
+    │   ├── 13389176__checkm2.tsv
+    │   ├── 13389176__gtdbtk.tsv
+    │   ├── 13389176__prokka.tsv
+    │   ├── 13389176__samples.tsv
+    │   └── 13389176__sections.tsv
+    └── versions.txt
+
+42 directories, 241 files
+
+```
+
+Let's take a look:
+
+```bash
+cd /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out/CompareM.out.dir
+ls
+```
+
+```
+assembly-stats  benchmarks  checkm2  gtdbtk  metadata.tsv  report_13389176.html  samples  tables  versions.txt
+```
+
+>[!Note]
+> Let's copy the report ot our local PC and take a look:
+> REMBER THIS COMMAND SHOULD BE RUN IN YOUR PC
+
+```bash
+scp fram.simga2.no:/cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out/CompareM.out.dir/*.html .
+```
+
+## 7. Visualization.
+
+#### Phylogenetic information.
+
+From a book chapter published here at MEMO [Long-Read Metagenomics and CAZyme Discovery](https://link.springer.com/protocol/10.1007/978-1-0716-3151-5_19)
+
+After assessment of quality (with CheckM2), taxonomic (with GTDB-Tk) and functional annotation (with DRAM and Prokka) of the MAGs, a visual representation of the phylogenetic clusterization (e.g., phylogenetic tree) and the annotations (e.g., heatmaps) are often desirable.
+
+Different software can be used to generate phylogenetic trees of the MAGs, including PhyloPhlAn, Anv'o, and IQ-TREE. At the MEMO lab we have also created an easy Rscript that can combine the information from GTDBTk, PhyloPhlAn and Checkm2 to produce a phylogenetic tree with different layers. In the GitHub repo [MetaGVisualToolBox](https://github.com/TheMEMOLab/MetaGVisualToolBox) we can find this script.
+
+The workflow, utilizes the PhyloPhlAn tool to produce a phylogenetic tree of the MAGs by searching and aligning 400 single-copy phylogenetic markers followed by the R package GGTree to merge and visualize the tree with quality metrics (completeness and contamination) and taxonomy annotations of each MAG.
+
+We can run this into an interactive job:
+
+```bash
+srun \
+--account=nn9987k \
+--gres=localscratch:20G \
+--cpus-per-task 16 \
+--nodes 1 \
+--time=02:00:00 \
+--pty bash \
+-i
+
+```
+
+Then PhyloPhlAn needs the amminoacid translated sequences from our MAGs. Let's use the ones from CompareM2:
+
+```bash
+mkdir -p $LOCALSCRATCH/ProteinPredictions && cd $LOCALSCRATCH
+rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/COMPAREM2/D01T6_T.Comparem2.out/CompareM.out.dir/samples/D01T6_T.M*/prokka/*.faa ./ProteinPredictions/
+tree ProteinPredictions
+```
+Now we can call the PHYLOGENETICS tool box (Conda enviroment)
+
+```bash
+module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
+conda activate /cluster/projects/nn9987k/.share/conda_environments/PHYLOGENETICS/
+```
+
+Then run PhyloPhlAn:
+
+```bash
+phylophlan \
+-i ProteinPredictions \
+-d /cluster/projects/nn9987k/.share/db/phylophlanDataBase/phylophlan \
+-t a \
+--diversity high \
+-f /cluster/projects/nn9987k/.share/db/phylophlanDataBase/supermatrix_aa.cfg \
+--verbose \
+--nproc $SLURM_CPUS_ON_NODE
+
+```
+
+This will produce the directory ```ProteinPredictions_phylophlan```
+
+```bash
+ls ProteinPredictions_phylophlan/
+```
+
+```
+ProteinPredictions_concatenated.aln  RAxML_bestTree.ProteinPredictions_refined.tre  RAxML_result.ProteinPredictions_refined.tre
+ProteinPredictions_resolved.tre      RAxML_info.ProteinPredictions_refined.tre      tmp
+ProteinPredictions.tre               RAxML_log.ProteinPredictions_refined.tre
+```
+
+
+We can use the the [MetaGVisualToolBox/GenoTaxoTree.R](https://github.com/TheMEMOLab/MetaGVisualToolBox/blob/main/scripts/GenoTaxoTree.R) script to then combine the phylogenetic tree produced by PhyloPhlAn with the Completeness and contamination information:
+
+Let's gather this information from comparem2
+
+```bash
+cd $LOCALSCRATCH
+rsync -aLhv /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out/CompareM.out.dir/gtdbtk/gtdbtk.bac120.summary.tsv .
+rsync -aLhv /cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6_C.Comparem2.out/CompareM.out.dir/checkm2/quality_report.tsv .
+ls
+```
+```
+gtdbtk.bac120.summary.tsv  ProteinPredictions_phylophlan  quality_report.tsv
+```
+
+The GenoTaxoTree.R script needs:
+
+```
+Input: CheckM2 tabular results, GTDB-Tk classification tables of Bacteria and Archaea, PhyloPhlAn phylogenetic tree.
+Output: A figure of the phylogenetic tree produced by PhyloPhlAn annotated with taxonomy and quality information from GTDB-Tk and CheckM2 by circular heatmaps
+```
+Like arguments:
+
+```
+CHECK <- args[1] #CheckM2 results table
+BAC <- args[2]  #GTDBTk Bacterial classification
+ARCH <- args[3] #GTDBTk Archeal classification
+TREE <- args[4] #Phyloplhlan RAXMl tree
+OUT <- args[5] #Output name
+```
+
+As we do no have archeas in our experiment lest create a mock file:
+
+```bash
+head -1  gtdbtk.bac120.summary.tsv > gtdbtk.ar53.summary.tsv
+```
+
+The R script is already installed in our PHYLOGENETICS enviroment so we can run it like:
+
+```bash
+
+```
+
+
+
+
+
+
+
+
