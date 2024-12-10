@@ -1902,8 +1902,10 @@ scp fram.simga2.no:/cluster/projects/nn9987k/$USER/results/MetaG/COMPAREM2/D02T6
 
 ## 7. Visualization.
 
+### Visualize phylogenetic information. 
+
 > [!Tip]
-> Visualize phylogenetic information. Taken from a book chapter published here at the MEMO group [Long-Read Metagenomics and CAZyme Discovery](https://link.springer.com/protocol/10.1007/978-1-0716-3151-5_19)
+> Taken from a book chapter published here at the MEMO group [Long-Read Metagenomics and CAZyme Discovery](https://link.springer.com/protocol/10.1007/978-1-0716-3151-5_19)
 
 After assessment of quality (with CheckM2), taxonomic (with GTDB-Tk) and functional annotation (with DRAM and Prokka) of the MAGs, a visual representation of the phylogenetic clusterization (e.g., phylogenetic tree) and the annotations (e.g., heatmaps) are often desirable.
 
