@@ -942,6 +942,12 @@ Plot saved as AssemblyStats.pdf
 
 ![AssemblyStats](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/Assemblystats.PNG)
 
+>[!Tip]
+> Copy data from FRAM to local PC
+
+```bash
+scp auve@fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/Ass*pdf .
+```
 **What can we say about these results?**
 
 > [!Important]
