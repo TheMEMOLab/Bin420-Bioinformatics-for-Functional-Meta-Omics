@@ -2008,9 +2008,33 @@ head -1  gtdbtk.bac120.summary.tsv > gtdbtk.ar53.summary.tsv
 The R script is already installed in our PHYLOGENETICS enviroment so we can run it like:
 
 ```bash
-
+Rscript $CONDA_PREFIX/bin/GenoTaxoTree.R quality_report.tsv gtdbtk.bac120.summary.tsv gtdbtk.ar53.summary.tsv ProteinPredictions_phylophlan/ProteinPredictions.tre D01_T6.PhyloTreeComCont
 ```
 
+```
+[1] "Saving figure to: D01_T6.PhyloTreeComCont.pdf"
+```
+
+As these are the final results we can then export the PhyloPhlAn and GenoTaxoTree results to the ```PROJECTS``` area:
+
+```bash
+mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/Phylogenetics
+rsync -aLhv --exclude="*.tsv" $LOCALSCRATCH/ /cluster/projects/nn9987k/$USER/results/MetaG/Phylogenetics/
+ls !$
+```
+
+```
+D01_T6.PhyloTreeComCont.pdf  ProteinPredictions_phylophlan  Rplots.pdf
+```
+
+Then we can transfer this to our computer:
+
+```bash
+scp fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/Phylogenetics/*pdf .
+```
+
+
+And look our beautiful phylogenetic tree:
 
 
 
