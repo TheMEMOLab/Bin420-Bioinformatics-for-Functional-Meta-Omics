@@ -1359,7 +1359,7 @@ outdir=$6 #output directory
 To run:
 
 ```bash
-sbatch sbatch /cluster/projects/nn9987k/.scripts/5_drep.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir/D01T6_T.Binning.dir fasta 70 5 /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
+sbatch /cluster/projects/nn9987k/.scripts/5_drep.SLURM.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir/D01T6_T.Binning.dir fasta 70 5 /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
 ```
 
 >[!Note]
@@ -1633,6 +1633,84 @@ echo "DRAM results are in: " $OUTDIR/DRAM.Results.dir
 ```
 
 </details>
+
+DRAM scipt requires the following arguments:
+
+dir=$1 ##directory with fasta files
+ext=$2 #Extension of the fasta files e.g. fasta
+OUTDIR=$3 #Outputdirectory
+
+Use the following sbatch line to run:
+
+
+```bash
+sbatch scripts/6a_DRAM.SLURM.sh /cluster/projects/nn9987k/$USER/results/MetaG/DREPLICATION/D01T6_T.DREP.70.5.out/ fasta /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out && mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
+```
+
+[!Note]
+> DRAM requires a lot of time (~4-6hrs) and resources (~80-500Gb RAM) to run, so it may be better just workign with the pre-made data:
+
+```bash
+mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
+rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/DRAM/D01T6_T.DRAM.out/ /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
+tree /cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out
+```
+
+```
+/cluster/projects/nn9987k/auve/results/MetaG/DRAM/D01T6_T.DRAM.out
+└── DRAM.Results.dir
+    ├── dram.annotation.dir
+    │   ├── annotate.log
+    │   ├── annotations.tsv
+    │   ├── genbank
+    │   │   ├── D01T6_T.MaxBin.out.004.gbk
+    │   │   ├── D01T6_T.Metabat2.102.gbk
+    │   │   ├── D01T6_T.Metabat2.136.gbk
+    │   │   ├── D01T6_T.Metabat2.143.gbk
+    │   │   ├── D01T6_T.Metabat2.150.gbk
+    │   │   ├── D01T6_T.Metabat2.182.gbk
+    │   │   ├── D01T6_T.Metabat2.188.gbk
+    │   │   ├── D01T6_T.Metabat2.53.gbk
+    │   │   └── D01T6_T.Metabat2.8.gbk
+    │   ├── genes.faa
+    │   ├── genes.fna
+    │   ├── genes.gff
+    │   ├── rrnas.tsv
+    │   ├── scaffolds.fna
+    │   └── trnas.tsv
+    └── dram.genome_summaries.dir
+        ├── distill.log
+        ├── genome_stats.tsv
+        ├── metabolism_summary.xlsx
+        ├── product.html
+        └── product.tsv
+
+4 directories, 22 files
+```
+
+There are two directories: 
+* dram.annotation.dir: It has all the "raw" annotations, gene sequences, protein preditions of the MAGs
+* dram.genome_summaries.dir: It has the distilled part of the genomes with the sorted metabolic functions.
+
+**dram.annotation.dir**
+
+Here we can find a table with annotations (annotations.tsv) as well as 3 fasta files:
+
+- genes.fna (All the predicted coding genes as nucleotides)
+- genes.faa (All the predicted coding genes translated to proteins)
+- scaffolds.fna (The total scaffolds/contigs of the bins)
+
+**dram.genome_summaries.dir**
+
+Although we can display the content of the *.tsv* files obtained by DRAM here in the terminal, the metabolism_summary.xlsx and product.html files are visually friendly, so it is recommended to export these to our personal computers and take a look. 
+
+>[!Note]
+> The following command should be run in your local PC
+
+```bash
+scp -r fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/DRAM/D01T6_T.DRAM.out/DRAM.Results.dir/dram.genome_summaries.dir .
+```
+
 
 
 ### CompareM2
