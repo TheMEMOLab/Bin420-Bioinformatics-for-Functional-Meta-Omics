@@ -86,7 +86,7 @@ echo "I am workung with this" $CONDA_PREFIX
 
 ###Do some work:########
 
-## For debuggin
+## For debugging
 echo "Hello" $USER
 echo "my submit directory is:"
 echo $SLURM_SUBMIT_DIR
@@ -154,7 +154,7 @@ time NanoPlot \
 ###
 echo "Moving files to $OUTDIR"
 
-###Creating a directory in $OUDIR for results
+###Creating a directory in $OUTDIR for results
 
 time $RSYNC $input.chopper.Nanoplot.dir $OUTDIR/$input\_QC/
 time $RSYNC $input.Nanoplot.dir $OUTDIR/$input\_QC/
@@ -245,7 +245,7 @@ srun: job 6019143 queued and waiting for resources
 srun: job 6019143 has been allocated resources
 [auve@c5-1.FARM: ~]$
 ```
-Now we are loged into a computing node. Let's work:
+Now we are logged into a computing node. Let's work:
 
 ```bash
  cd /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper/
@@ -463,7 +463,7 @@ Plot saved to comparison_NanoStats.pdf
 scp auve@fram.sigma2.no:/cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Chopper/D01T6_T_QC/comparison_NanoStats.pdf .
 ```
 
-> Rember to change ```auve``` to your user name in FRAM
+> Rember to change ```auve``` to your username in FRAM
 
 **What can we say about this plot?**
 
@@ -472,7 +472,7 @@ scp auve@fram.sigma2.no:/cluster/projects/nn9987k/.auve/results/MetaG/D01T6_T_Ch
 
 ## 2. Assembly reads with MetaFlye
 
-To extend the ONT reads we will use [Flye]() assembler with the ```--meta``` flag:
+To extend the ONT reads we will use the [Flye]() assembler with the ```--meta``` flag:
 
 <details>
 <summary>This is the template</summary>
@@ -549,7 +549,7 @@ echo $CONDA_PREFIX
 
 ###Do some work:########
 
-## For debuggin
+## For debugging
 echo "Hello" $USER
 echo "my submit directory is:"
 echo $SLURM_SUBMIT_DIR
@@ -603,7 +603,7 @@ Running using sbatch:
 sbatch /cluster/projects/nn9987k/.scripts/2_flye.SLURM.chr.sh D01T6_T /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T_Chopper/ /cluster/projects/nn9987k/$USER/results
 ```
 > [!NOTE]
-> Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
+> Unfortunatelly for the BIN420 Course Sigma2 has only assigned a couple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
 
 But you can copy the results of this assembly by:
 
@@ -612,7 +612,7 @@ rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.flye.outdir/assembl
 ```
 
 > [!WARNING] 
-> !NB: Remember to kill the Fly job by scancel ```<JOBID>``` .
+> !NB: Remember to kill the Flye job with scancel ```<JOBID>``` .
 
 Let's take a look on these files:
 
@@ -635,7 +635,7 @@ srun: job 6019143 queued and waiting for resources
 srun: job 6019143 has been allocated resources
 [auve@c5-1.FARM: ~]$
 ```
-Now we are loged into a computing node.
+Now we are logged into a computing node.
 
 Display the content of the Flye assembly folder:
 
@@ -829,13 +829,13 @@ sbatch /cluster/projects/nn9987k/.scripts/3_Medaka.SLURM.sh D01T6_T /cluster/pro
 ```
 
 > [!NOTE]
-> Unfortunatelly for the BIN240 Course Sigma2 has only assigned a copuple of nodes in the FRAM computer, so it is most likely the Job never runs/finish.
+> Unfortunately for the BIN420 Course Sigma2 has only assigned a couple of nodes in the FRAM computer, so it is most likely that the Job never runs/finish.
 
 
-Same as the fly command, we have already prepared the data for the course and you can copy the Medaka results by:
+Same as the fly command, we have already prepared the data for the course, and you can copy the Medaka results by:
 
 > [!WARNING] 
-> !NB: Remember to kill the Fly job by scancel ```<JOBID>``` Before copying the data .
+> !NB: Remember to kill the Flye job with scancel ```<JOBID>``` Before copying the data .
 
 ```bash
 rsync -avLh /cluster/projects/nn9987k/.results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.dir/D01T6_T.medaka.consensus.fasta /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/
@@ -869,7 +869,7 @@ srun \
 -i
 ```
 
-Now we can run ```assemlby-stats``` on both files like this:
+Now we can run ```assembly-stats``` on both files like this:
 
 ```bash
 module load Miniconda3/23.10.0-1
@@ -1055,7 +1055,7 @@ echo "Copy assembly"
 
 time $RSYNC $ASSDIR/$input.medaka.dir/$input.medaka.consensus.fasta ./$input.assembly.fasta
 
-##Aling
+##Align
 
 echo "Start minimap2 "
 date +%d\ %b\ %T
@@ -1086,7 +1086,7 @@ rm -r $input.assembly.bam
 
 ###Binning
 
-echo "Calcaulating deepth..."
+echo "Calculating depth..."
 
 time jgi_summarize_bam_contig_depths \
         --outputDepth $input.depth.txt \
@@ -1391,7 +1391,7 @@ tree /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
     │   │       │   │   ├── hmmer.analyze.txt
     │   │       │   │   └── hmmer.tree.txt
     ...
-│   ├── Cluster_scoring.pdf
+    │   ├── Cluster_scoring.pdf
     │   ├── Primary_clustering_dendrogram.pdf
     │   ├── Secondary_clustering_dendrograms.pdf
     │   ├── Secondary_clustering_MDS.pdf
