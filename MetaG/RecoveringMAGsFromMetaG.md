@@ -1958,6 +1958,9 @@ phylophlan \
 
 This will produce the directory ```ProteinPredictions_phylophlan```
 
+> [!Note]
+> If the job does not work you can copy this from ```/cluster/projects/nn9987k/.results/MetaG/ProteinPredictions_phylophlan```
+
 ```bash
 ls ProteinPredictions_phylophlan/
 ```
