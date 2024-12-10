@@ -1,4 +1,4 @@
 These exercises were conceptualized, developed and tested by 
-  - Carl Mathias Kobel
   - Arturo Vera-Ponce de Leon
+  - Carl Mathias Kobel
   - Velma Tea Essi Aho
