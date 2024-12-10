@@ -947,6 +947,7 @@ Plot saved as AssemblyStats.pdf
 
 ```bash
 scp auve@fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/Ass*pdf .
+
 ```
 **What can we say about these results?**
 
