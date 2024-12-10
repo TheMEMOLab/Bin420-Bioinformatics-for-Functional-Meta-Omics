@@ -1400,14 +1400,16 @@ tree /cluster/projects/nn9987k/$USER/results/MetaG/DEREPLICATION
     │   │       │   │   ├── hmmer.analyze.txt
     │   │       │   │   └── hmmer.tree.txt
     ...
-    │   ├── Cluster_scoring.pdf
-    │   ├── Primary_clustering_dendrogram.pdf
-    │   ├── Secondary_clustering_dendrograms.pdf
-    │   ├── Secondary_clustering_MDS.pdf
-    │   └── Winning_genomes.pdf
-    └── log
-        ├── cluster_arguments.json
-        └── logger.log
+        ├── figures
+        │   ├── Cluster_scoring.pdf
+        │   ├── Cluster_scatterplots.pdf
+        │   ├── Primary_clustering_dendrogram.pdf
+        │   ├── Secondary_clustering_dendrograms.pdf
+        │   ├── Secondary_clustering_MDS.pdf
+        │   └── Winning_genomes.pdf
+        └── log
+            ├── cluster_arguments.json
+            └── logger.log
 
 584 directories, 8367 files
 ```
