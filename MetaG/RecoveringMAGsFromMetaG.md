@@ -873,6 +873,7 @@ Now we can run ```assemlby-stats``` on both files like this:
 
 ```bash
 module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
 conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
 FLYE="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/assembly.fasta"
 MEDAKA="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta"
@@ -1156,7 +1157,8 @@ sbatch /cluster/projects/nn9987k/.scripts/4_Binning.SLURM.sh D01T6_T /cluster/pr
 >[!Note]
 > As before if the script does not work we can copy the data by
 ```bash
-rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.BINNING.dir/D01T6_T.Binning.dir /cluster/projects/nn9987k/$USER/results/MetaG/
+mkdir -p /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir/
+rsync -aLhv /cluster/projects/nn9987k/.results/MetaG/D01T6_T.BINNING.dir/D01T6_T.Binning.dir /cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.BINNING.dir/
 ```
 >[!Important]
 > If the job did not work remember to kill it by ```scancel <jobid>```
