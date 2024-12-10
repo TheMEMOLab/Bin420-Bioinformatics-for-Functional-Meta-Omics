@@ -873,6 +873,7 @@ Now we can run ```assembly-stats``` on both files like this:
 
 ```bash
 module load Miniconda3/23.10.0-1
+eval "$(conda shell.bash hook)"
 conda activate /cluster/projects/nn9987k/.share/conda_environments/MetaG_Assembly_And_Binning/
 FLYE="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.flye.outdir/assembly.fasta"
 MEDAKA="/cluster/projects/nn9987k/$USER/results/MetaG/D01T6_T.MEDAKA.dir/D01T6_T.medaka.consensus.fasta"
