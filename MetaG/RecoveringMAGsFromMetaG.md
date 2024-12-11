@@ -1511,7 +1511,13 @@ The following plot summarizes what we have been doing so far:
 ### Running DRAM: Distilled and Refined Annotation of Metabolism
 
 "[DRAM](https://github.com/WrightonLabCSU/DRAM) (Distilled and Refined Annotation of Metabolism) is a tool for annotating metagenomic assembled genomes and VirSorter identified viral contigs. DRAM annotates MAGs and viral contigs using KEGG (if provided by the user), UniRef90, PFAM, dbCAN, RefSeq viral, VOGDB and the MEROPS peptidase database as well as custom user databases..."
+
+
+
 <img src="https://github.com/avera1988/NMBU-Bio-326/blob/main/images/DRAM.jpg" height="400">
+
+
+
 
 <details>
 
