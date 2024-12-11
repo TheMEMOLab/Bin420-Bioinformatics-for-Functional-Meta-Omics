@@ -1521,7 +1521,7 @@ The following plot summarizes what we have been doing so far:
 
 <details>
 
-<summary>This is the DRAM SLURM template:
+<summary>This is the DRAM SLURM template:</summary>
 
 ```bash
 
