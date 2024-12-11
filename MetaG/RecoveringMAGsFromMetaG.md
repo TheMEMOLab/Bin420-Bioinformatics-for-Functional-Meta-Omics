@@ -2039,7 +2039,8 @@ scp fram.sigma2.no:/cluster/projects/nn9987k/$USER/results/MetaG/Phylogenetics/*
 
 And look our beautiful phylogenetic tree:
 
-![TREE](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/genotaxotree.PNG)
+<img src="https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/genotaxotree.PNG" height="400">
+
 
 
 
