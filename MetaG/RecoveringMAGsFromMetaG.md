@@ -2047,12 +2047,14 @@ And look our beautiful phylogenetic tree:
 <img src="https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/genotaxotree.PNG" height="550">
 
 
-### distilR to summarize 
+### distilR to summarize functional KEGG annotations
 
 [distillR](https://github.com/anttonalberdi/distillR) is an R package for distilling functional annotations of bacterial genomes and metagenomes into meaningful quantitative metrics defined as Genome-Inferred Functional Traits (GIFT). The package relies on a curated database of ~500 metabolic pathways and gene clusters (collectivelly refered to as 'bundles') to calculate standardised genome-inferred functional traits using KEGG and Enzyme Commission (EC) identifiers. 
 
+<details>
 
-The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs
+<summary>The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs </summary>
+
 
 ```r
 library(tidyverse)
@@ -2216,5 +2218,5 @@ ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
 
 ```
 
-
+</details>
 
