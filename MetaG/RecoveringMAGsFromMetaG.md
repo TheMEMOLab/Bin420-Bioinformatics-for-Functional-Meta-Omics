@@ -2220,3 +2220,6 @@ ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
 
 </details>
 
+At the end you will get a heatmap where the rows cluster the genomes According to the abundance of GIFTS:
+
+![DISTIL](https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/distilR.PNG)
