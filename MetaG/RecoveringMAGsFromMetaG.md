@@ -2085,6 +2085,7 @@ GIFTs_domains <- to.domains(GIFTs_functions,GIFT_db)
 Elements <- GIFT_db %>%
   select(Code_element,Domain, Function)
 
+#This DF will help to create an annotad column
 GIFTSannotCol <- Elements %>%
   select(Code_element,Function) %>%
   distinct() %>%
@@ -2172,10 +2173,13 @@ GenoTaxoInfo <- Tax %>%
   mutate(Genus=coalesce(Genus,Order)) %>%
   dplyr::arrange(Phylum)
 
-
+#Tibble to get the tax for heatmap
 TaxAnnot <- GenoTaxoInfo %>%
   select(Genome,Order) %>%
   column_to_rownames("Genome")
+
+
+#List of nice colors  for rows (Taxa) and columns (Funcitions)
 
 
 ColorAnnot <- list(Order=(TaxAnnot %>%
@@ -2208,8 +2212,6 @@ GIFTSHeatmap <- pheatmap::pheatmap(GIFTs_elements,
                   cellheight = 12)
 
 ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
-
-
 
 
 ```
