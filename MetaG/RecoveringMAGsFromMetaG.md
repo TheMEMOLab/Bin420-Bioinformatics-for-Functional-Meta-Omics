@@ -2047,9 +2047,172 @@ And look our beautiful phylogenetic tree:
 <img src="https://github.com/TheMEMOLab/Bin420-Bioinformatics-for-Functional-Meta-Omics/blob/main/img/genotaxotree.PNG" height="550">
 
 
+### distilR to summarize 
+
+[distillR](https://github.com/anttonalberdi/distillR) is an R package for distilling functional annotations of bacterial genomes and metagenomes into meaningful quantitative metrics defined as Genome-Inferred Functional Traits (GIFT). The package relies on a curated database of ~500 metabolic pathways and gene clusters (collectivelly refered to as 'bundles') to calculate standardised genome-inferred functional traits using KEGG and Enzyme Commission (EC) identifiers. 
+
+
+The following R code will use the gtdbtk and DRAM annotation to combine the taxonomy and functional annotation into a herachical clustering of GIFTs
+
+```r
+library(tidyverse)
+library(distillR)
+library(viridis)
+library(Polychrome)
+
+#Read the annotation from DRAM
+Annot <- read_tsv("annotations.tsv") %>%
+  rename("Gene_id"=`...1`) %>%
+  rename("Genome"=fasta) %>%
+  select(Genome,Gene_id,ko_id) %>%
+  drop_na()
+
+#use distillR to obtain the GIFTS
+
+GIFTs <- distill(Annot,GIFT_db,genomecol=1,annotcol=3)
+
+#Aggregate bundle-level GIFTs into the compound level
+GIFTs_elements <- to.elements(GIFTs,GIFT_db)
+
+#Aggregate element-level GIFTs into the function level
+GIFTs_functions <- to.functions(GIFTs_elements,GIFT_db)
+
+#Aggregate function-level GIFTs into overall Biosynthesis, Degradation and Structural GIFTs
+GIFTs_domains <- to.domains(GIFTs_functions,GIFT_db)
+
+#Extract the functional trais from the database
+
+Elements <- GIFT_db %>%
+  select(Code_element,Domain, Function)
+
+GIFTSannotCol <- Elements %>%
+  select(Code_element,Function) %>%
+  distinct() %>%
+  column_to_rownames("Code_element")
+
+##Taxonomy from GTDBTK
+
+Tax <- read_tsv("gtdbtk.bac120.summary.tsv") %>%
+  dplyr::select(user_genome,classification) %>%
+  rename("Genome"=user_genome)
+
+#Modify the taxonomy
+
+GenoTaxoInfo <- Tax %>%
+  select(Genome,classification) %>%
+  separate(classification,sep=";",
+           into=c("D",
+                  "P",
+                  "C",
+                  "O",
+                  "Fa",
+                  "G",
+                  "S"),
+           remove = FALSE) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = ".*[[:space:]]")) %>%
+  mutate_at(.vars=vars(S),
+            .funs = ~
+              str_remove(.,
+                         pattern = "(?<=sp)\\d.*")) %>%
+  mutate_at(.vars = vars(D),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*d__")) %>%
+  mutate_at(.vars = vars(P),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*p__")) %>%
+  mutate_at(.vars = vars(C),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*c__")) %>%
+  mutate_at(.vars = vars(O),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*o__")) %>%
+  mutate_at(.vars = vars(Fa),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*f__")) %>%
+  mutate_at(.vars = vars(G),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*g__")) %>%
+  mutate_at(.vars = vars(S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = ".*s__")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_remove_all(.,
+                             pattern = "_..*")) %>%
+  mutate_at(.vars = vars(D,P,C,O,Fa,G,S),
+            .funs = ~
+              str_replace(.,
+                          pattern = "^$",
+                          replacement = ";")) %>%
+  unite("classification",D:P:C:O:Fa:G:S,sep = "_") %>%
+  mutate_at(.vars = vars(classification),
+            .funs = ~
+              str_replace(.,
+                          pattern = "_;.*",
+                          replacement = ""))%>%
+  separate(classification,sep = "_",
+           remove = FALSE,
+           into = c("Domain",
+                    "Phylum",
+                    "Class",
+                    "Order",
+                    "Family",
+                    "Genus",
+                    "Species")) %>%
+  mutate(Genus=coalesce(Genus,Order)) %>%
+  dplyr::arrange(Phylum)
+
+
+TaxAnnot <- GenoTaxoInfo %>%
+  select(Genome,Order) %>%
+  column_to_rownames("Genome")
+
+
+ColorAnnot <- list(Order=(TaxAnnot %>%
+                            select(Order) %>%
+                            distinct() %>%
+                            mutate(Color=RColorBrewer::brewer.pal(length(TaxAnnot %>% 
+                                                                           select(Order) %>% 
+                                                                           distinct() %>% 
+                                                                           deframe()),"Set1")) %>%
+                            deframe()),
+                          Function=(Elements %>%
+                               select(Function) %>%
+                               distinct() %>%
+                               mutate(Color=palette36.colors(n=21)) %>%
+                               deframe()))
+
+Color <- rev(viridis(10))
+
+#Generate the Heatmap
+
+GIFTSHeatmap <- pheatmap::pheatmap(GIFTs_elements,
+                  cluster_cols = F,
+                  color = Color,
+                  annotation_col = GIFTSannotCol,
+                  annotation_row = TaxAnnot,
+                  annotation_colors = ColorAnnot,
+                  show_colnames = F,
+                  show_rownames = F,
+                  cellwidth = 2,
+                  cellheight = 12)
+
+ggsave(GIFTSHeatmap,file="Gifts.DRAM.GTDBTk.pdf",width = 20,height = 20)
 
 
 
+
+```
 
 
 
